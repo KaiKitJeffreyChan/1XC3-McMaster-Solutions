@@ -1,0 +1,58 @@
+Assignment 1
+Jeffrey Chan
+February 1st 2021
+
+Question 1
+1) touch file.txt
+2) mkdir folder
+3) cp file.txt ./folder/filecopy.txt
+
+Quesiton 2
+uname -r
+
+Quesiton 3
+mkdir -p test1/test2/test3
+
+Question 4
+ssh lovelacea@mcmasterserver.ca
+
+Question 5
+scp hopperg@mcmasterserver.com:~/documents/important.doc/code
+
+Question 6
+grep -E ("ERROR[0-5]{3}" | "X{3,9}"| "ALERT[^XY]")*.csv
+
+
+Part B)
+https://pascal.cas.mcmaster.ca/~chank98/cs1xc3.html
+
+
+Bonus --------------
+
+To first start I made two txt files (file1.txt and file2.txt) in the same directory (touch) and edited them with 
+a slight difference (vi). Then I used the command 
+
+diff file1.txt file2.txt 
+
+to compare them both. The contents within file1 was "Hi i am banana" and file2 "Hi i am apple"
+
+the following command would return this 
+
+
+1c1
+< Hi i am banana
+---
+> Hi i am apple
+
+each different is listed in turn in a single column, each difference is labeled 
+These labels contain special numbers and characters like 1c1 the first number is the line number in file1.txt
+and second number is line in file2.txt the letter in the middle may also vary.
+
+c - you need to change a certain line
+
+a - you need to add something 
+
+d - you need to delete something
+
+
+
