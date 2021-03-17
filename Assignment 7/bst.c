@@ -2,8 +2,8 @@
 *
 * Purpose: Assignment #7 Starter Code
 *
-* Description: This binary search tree contains no duplicates.  This file 
-* contains all functions created during the week 8 lectures and week 9 
+* Description: This binary search tree contains no duplicates.  This file
+* contains all functions created during the week 8 lectures and week 9
 * tutorials.
 *
 * Author: Kevin Browne
@@ -19,11 +19,11 @@
 typedef struct node {
   int key;
   struct node *left_child;
-  struct node *right_child; 
+  struct node *right_child;
 } bstNode;
 
 
-// Functions created during week 8 lectures 
+// Functions created during week 8 lectures
 void simple_print(bstNode *node, int depth);
 bool verifyBST(bstNode *node, int minkey, int maxkey);
 bstNode* create_node(int new_key);
@@ -42,18 +42,14 @@ int num_nodes(bstNode *node);
 void breadth_first(bstNode *node);
 
 
-// Functions to implement for Assignment #7 
+// Functions to implement for Assignment #7
 
-// HINT: This function was used as a helper function for array_of_sorted_keys
-// in the instructor's solution:
-// void build_array(bstNode *node, int *array, int *current_index);
+void build_array(bstNode *node, int *array, int* current_index);
 int *array_of_sorted_keys(bstNode *node);
 
-// HINT: This function was used as a helper function for 
-// balanced_tree_from_sorted_array in the instructor's solution:
-// bstNode *construct_tree(int *array, int min, int max);
+bstNode *construct_tree(int *array, int min, int max);
 bstNode *balanced_tree_from_sorted_array(int *sorted_array, int length);
-
+// //
 bstNode *balanced_tree_copy(bstNode *tree);
 
 int main()
@@ -68,7 +64,6 @@ int main()
   // print out the tree
   printf("\n\nTree before converted into a sorted array: \n");
   simple_print(tree1, 0);
-
   // store the sorted keys of the BST into an array
   int *array = array_of_sorted_keys(tree1);
   int length = num_nodes(tree1);
@@ -79,9 +74,9 @@ int main()
   // return a balanced tree given a sorted array
   bstNode *tree2 = balanced_tree_from_sorted_array(array, length);
   printf("\n\nTree constructed from the array: \n");
-  simple_print(tree2, 0);  
-
-  // create an unbalanced tree, and use balanced_tree_copy to return a balanced 
+  simple_print(tree2, 0);
+  //
+  // create an unbalanced tree, and use balanced_tree_copy to return a balanced
   // version of the tree
   bstNode *unbalance = NULL;
   for (int i = 0; i < 10; i++) unbalance = insert(unbalance, i, &was_inserted);
@@ -94,20 +89,58 @@ int main()
 
 
 
-// Assignment #7 solution code goes here
+// Assignment #7 solution code goes here ______________________________________
 
+//function build_array recursivly traveses through bst in order
+//adds each element to list in order
+void build_array(bstNode *node, int *array, int* current_index){
+  if (node == NULL) return;
+  build_array(node->left_child, array, current_index);
+  array[*current_index] = node->key;
+  *current_index += 1;
+  build_array(node->right_child, array, current_index);
+}
 
+//function creates dynamically allocated array
+//calls build_array aux function to add values to array
+int *array_of_sorted_keys(bstNode *node){
+  int size = num_nodes(node), curr;
+  int* sorted_keys, *current_index = &curr;
+  *current_index = 0;
+  //dynamically allocate space for number of nodes
+  sorted_keys = calloc(size, sizeof(int));
+  build_array(node, sorted_keys, current_index);
+  //return pointer to array
+  return sorted_keys;
+}
 
+//fucntion recursivly produces a bst from array
+bstNode *construct_tree(int *array, int min, int max){
+  if (min > max) return NULL;
+  int middle = min + (max-min)/2;
+  bstNode* node = calloc(1, sizeof(bstNode));
+  node->key = array[middle];
+  //left half of array is broken down into another bst and so on...
+  node->left_child = construct_tree(array, min, middle-1);
+  //right half of array is broken down into another bst and so on...
+  node->right_child = construct_tree(array, middle+1, max);
+  //return head node
+  return node;
+}
 
+bstNode *balanced_tree_from_sorted_array(int *sorted_array, int length){
+  if(length == 0) return NULL; //if length is 0 return NULL (no nodes)
+  else return construct_tree(sorted_array, 0, length-1);
+}
 
+bstNode *balanced_tree_copy(bstNode *tree){
+  //create array of all keys in order
+  int *array = array_of_sorted_keys(tree);
+  //return bst using balanced_tree_from_sorted_array function
+  return balanced_tree_from_sorted_array(array, num_nodes(tree));
+}
 
-
-
-
-
-
-
-
+//_____________________________________________________________________________
 
 // Returns the total number of nodes in a BST
 int num_nodes(bstNode *node)
@@ -123,13 +156,13 @@ void breadth_first(bstNode *node)
   if (node == NULL) return ;
 
   // Create a queue large enough to hold pointers to all nodes in the BST
-  // set the front to the first element and rear to the next, and put the 
+  // set the front to the first element and rear to the next, and put the
   // root node as the current node in the queue.
   int total = num_nodes(node);
   bstNode **queue = calloc(total, sizeof(bstNode*));
   int front = 0, rear = 1;
-  
-  // For each node, place its left and right children on he queue, and then 
+
+  // For each node, place its left and right children on he queue, and then
   // increment the front of the queue
   queue[front] = node;
   while (front < total)
@@ -196,17 +229,17 @@ void simple_print(bstNode *node, int depth)
   simple_print(node->right_child, depth + 1);
 }
 
-// Verifies that a tree defined with bstNode actually conforms to BST 
-// requirements.  It works by progressively tightening the acceptable range 
-// of values for a key as it rescursively traverses the tree, by setting a 
-// new max and/or min depending on the value of the current key and the 
-// direction of the travesal.  If ever a key is out of range, we return 
-// false, and if we encounter leaf nodes (or an empty tree) we return true, 
+// Verifies that a tree defined with bstNode actually conforms to BST
+// requirements.  It works by progressively tightening the acceptable range
+// of values for a key as it rescursively traverses the tree, by setting a
+// new max and/or min depending on the value of the current key and the
+// direction of the travesal.  If ever a key is out of range, we return
+// false, and if we encounter leaf nodes (or an empty tree) we return true,
 // and by continually "and-ing" the results we're able to verify the structure.
 bool verifyBST(bstNode *node, int minkey, int maxkey) {
     if (node == NULL) return true;
-    if (node->key < minkey || node->key > maxkey) return false;    
-    return verifyBST(node->left_child, minkey, node->key - 1) && 
+    if (node->key < minkey || node->key > maxkey) return false;
+    return verifyBST(node->left_child, minkey, node->key - 1) &&
            verifyBST(node->right_child, node->key + 1, maxkey);
 }
 
@@ -220,13 +253,13 @@ bstNode* create_node(int new_key)
   return newNode;
 }
 
-// Inserts a node in a BST with insert_key.  Sets was_inserted to true if a new 
+// Inserts a node in a BST with insert_key.  Sets was_inserted to true if a new
 // node actually had to be inserted.
 bstNode *insert(bstNode *node, int insert_key, bool *was_inserted)
 {
   *was_inserted = false;
 
-  // In the case of an empty tree, or that we have reached a NULL pointer, we 
+  // In the case of an empty tree, or that we have reached a NULL pointer, we
   // create the node and return it
   if (node == NULL)
   {
@@ -235,35 +268,35 @@ bstNode *insert(bstNode *node, int insert_key, bool *was_inserted)
   }
   // If the key to insert is greater than the current key, traverse the right
   // subtree to continue to look for the correct position to insert the key.
-  // We keep setting the node pointers as we traverse the tree because we 
-  // may modify the pointers... e.g. if right_child is NULL in this case, then 
-  // on the next function call we'll be returning a new node (with the above) 
-  // code, and we'll want right_child to point to that new node.  Otherwise 
-  // we'll want it to keep pointing to the node it was pointing to before, 
-  // which is achieved with the return node statement below.  
+  // We keep setting the node pointers as we traverse the tree because we
+  // may modify the pointers... e.g. if right_child is NULL in this case, then
+  // on the next function call we'll be returning a new node (with the above)
+  // code, and we'll want right_child to point to that new node.  Otherwise
+  // we'll want it to keep pointing to the node it was pointing to before,
+  // which is achieved with the return node statement below.
   else if (insert_key > node->key)
   {
     node->right_child = insert(node->right_child, insert_key, was_inserted);
   }
-  // Same idea as above, except we traverse the left subtree if the key to 
+  // Same idea as above, except we traverse the left subtree if the key to
   // insert is less than the current node's key.
   else if (insert_key < node->key)
   {
     node->left_child = insert(node->left_child, insert_key, was_inserted);
   }
 
-  // Returns the current node, this run if we are traversing the tree and 
-  // are returning the existing left or right child node of another node, 
-  // OR if we have found a node where insert_key == node->key in which case 
+  // Returns the current node, this run if we are traversing the tree and
+  // are returning the existing left or right child node of another node,
+  // OR if we have found a node where insert_key == node->key in which case
   // we are not actually needing to create a new node.
   return node;
 }
 
 // Finds the minimum by repeatedly traversing the left subtree until we cannot
-// anymore. 
+// anymore.
 int find_minimum(bstNode *node)
 {
-  // Handles an empty BST with a printf and returning INT_MIN... this isn't the 
+  // Handles an empty BST with a printf and returning INT_MIN... this isn't the
   // only way we could handle this, but this is one acceptable way.
   if (node == NULL)
   {
@@ -276,11 +309,11 @@ int find_minimum(bstNode *node)
 }
 
 // Finds the maximum by repeatedly traversing the right subtree until we cannot
-// anymore. 
+// anymore.
 int find_maximum(bstNode *node)
 {
-  // Handles an empty BST with a printf and returning INT_MAX... this isn't the 
-  // only way we could handle this, but this is one acceptable way.  
+  // Handles an empty BST with a printf and returning INT_MAX... this isn't the
+  // only way we could handle this, but this is one acceptable way.
   if (node == NULL)
   {
     printf("ERROR: Cannot find maximum key of an empty BST.");
@@ -291,9 +324,9 @@ int find_maximum(bstNode *node)
   else return find_maximum(node->right_child);
 }
 
-// Determines whether or not a key is a member of a BST or not.  It traverses 
-// the tree until it finds where the node "should" be either because it finds 
-// the node with that key, or it finds a NULL (either an empty list, or an 
+// Determines whether or not a key is a member of a BST or not.  It traverses
+// the tree until it finds where the node "should" be either because it finds
+// the node with that key, or it finds a NULL (either an empty list, or an
 // empty left or child child pointer).
 bool is_member(bstNode *node, int find_key)
 {
@@ -303,7 +336,7 @@ bool is_member(bstNode *node, int find_key)
   else return true;
 }
 
-// Deletes a node with delete_key from a tree if it exists.  Sets was_deleted 
+// Deletes a node with delete_key from a tree if it exists.  Sets was_deleted
 // true if a deletion actually occurs and false otherwise.
 bstNode *delete(bstNode *node, int delete_key, bool *was_deleted)
 {
@@ -311,21 +344,21 @@ bstNode *delete(bstNode *node, int delete_key, bool *was_deleted)
   // in the case of an empty tree we can simple return false
   if (node == NULL) return NULL;
 
-  // If the key we are attempting to delete is greater than the current node's 
-  // key than we traverse the right-subtree.  As with insert we're effectively 
-  // "re-setting" the pointers as we traverse the tree given that our delete 
+  // If the key we are attempting to delete is greater than the current node's
+  // key than we traverse the right-subtree.  As with insert we're effectively
+  // "re-setting" the pointers as we traverse the tree given that our delete
   // operation may alter the tree structure (like deleting a node).
   if (delete_key > node->key)
   {
-    node->right_child = 
+    node->right_child =
       delete(node->right_child, delete_key, was_deleted);
   }
-  // The same as above, except we traverse the left-subtree in the case the 
+  // The same as above, except we traverse the left-subtree in the case the
   // key we are attempting to delete is lower than the current node's key.
   else if (delete_key < node->key)
   {
-    node->left_child = 
-      delete(node->left_child, delete_key, was_deleted);    
+    node->left_child =
+      delete(node->left_child, delete_key, was_deleted);
   }
   // in this case, we need to delete a node because we have found the key
   else
@@ -353,25 +386,25 @@ bstNode *delete(bstNode *node, int delete_key, bool *was_deleted)
       free(node);
       return temp;
     }
-    // If the node has 2 children we replace it with the minimum value of the 
-    // node's right-subtree.  We do this because this value is known to be 
-    // higher than all of the node's left subtree values, AND lower than all 
-    // of the node's (other) right subtree values.  After setting the node to 
-    // this new key value, we delete the node with that key from the right 
+    // If the node has 2 children we replace it with the minimum value of the
+    // node's right-subtree.  We do this because this value is known to be
+    // higher than all of the node's left subtree values, AND lower than all
+    // of the node's (other) right subtree values.  After setting the node to
+    // this new key value, we delete the node with that key from the right
     // subtree (using the same function), and return the node.
-    else 
+    else
     {
       *was_deleted = true;
       int min_of_right_subtree = find_minimum(node->right_child);
       node->key = min_of_right_subtree;
-      node->right_child = 
+      node->right_child =
         delete(node->right_child, min_of_right_subtree, was_deleted);
       return node;
     }
   }
 
-  // Will be returned as we traverse the tree in the case that no deletion 
-  // occurs... the left_child or right_child of the node that called this 
+  // Will be returned as we traverse the tree in the case that no deletion
+  // occurs... the left_child or right_child of the node that called this
   // function will be set to the previous left_child or right_child in this
   // case.
   return node;
