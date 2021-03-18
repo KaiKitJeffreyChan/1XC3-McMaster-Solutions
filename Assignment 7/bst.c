@@ -91,7 +91,7 @@ int main()
 
 // Assignment #7 solution code goes here ______________________________________
 
-//function build_array recursivly traveses through bst in order
+//function build_array recursively traverses through bst in order
 //adds each element to list in order
 void build_array(bstNode *node, int *array, int* current_index){
   if (node == NULL) return;
@@ -114,10 +114,10 @@ int *array_of_sorted_keys(bstNode *node){
   return sorted_keys;
 }
 
-//fucntion recursivly produces a bst from array
+//function recursively produces a bst from array
 bstNode *construct_tree(int *array, int min, int max){
   if (min > max) return NULL;
-  int middle = min + (max-min)/2;
+  int middle = min + (max-min)/2; //prevent int overflow
   bstNode* node = calloc(1, sizeof(bstNode));
   node->key = array[middle];
   //left half of array is broken down into another bst and so on...
