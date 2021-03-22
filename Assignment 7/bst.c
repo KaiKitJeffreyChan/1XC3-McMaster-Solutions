@@ -137,7 +137,9 @@ bstNode *balanced_tree_copy(bstNode *tree){
   //create array of all keys in order
   int *array = array_of_sorted_keys(tree);
   //return bst using balanced_tree_from_sorted_array function
-  return balanced_tree_from_sorted_array(array, num_nodes(tree));
+  bstNode* ans = balanced_tree_from_sorted_array(array, num_nodes(tree));
+  free(array);
+  return ans;
 }
 
 //_____________________________________________________________________________
