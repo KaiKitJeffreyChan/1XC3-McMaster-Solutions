@@ -6,7 +6,9 @@
 *
 *******************************************************************************/
 
-int square_area(int side) { return side * side; }
+int square_area(int side) {
+  return side * side;
+}
 
 int multiply(int m, int n) { return m * n; }
 
@@ -19,4 +21,3 @@ int max(int array[], int total)
   }
   return max;
 }
-

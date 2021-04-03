@@ -15,7 +15,7 @@ void selection_sort(Pos* all_places, int size);
 int main(){
   bool stay = true;
   int size = 1, i;
-  char cont, input;
+  char cont;
   Pos* all_places;
   all_places = calloc(size, sizeof(Pos)); //dynamic allocation
   all_places[(size-1)] = create_position();
