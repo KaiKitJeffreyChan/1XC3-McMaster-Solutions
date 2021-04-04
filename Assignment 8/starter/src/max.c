@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     numbers[i] = atoi(argv[i+1]);
   }
 
-  printf("%d \n", max(numbers, (argc-1)));
+  printf("%d\n", max(numbers, (argc-1)));
 
   free(numbers);
 
