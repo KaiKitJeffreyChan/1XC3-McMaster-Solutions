@@ -1,6 +1,6 @@
 /*******************************************************************************
 *
-* Purpose: Assignment #6 starter code.
+*  Purpose: Assignment #6 starter code.
 *
 * Description: This code includes all the linked list functions we defined
 * in lecture or in lab.  See the assignment document to understand the
