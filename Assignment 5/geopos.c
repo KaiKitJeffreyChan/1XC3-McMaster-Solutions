@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-//Defines position type with latitude and longitude
+ //Defines position type with latitude and longitude
 typedef struct pos {
   double latitude, longitude;
 } Pos;
