@@ -2,7 +2,7 @@
 *
 * Purpose: Library function definitions
 *
-* Author: Kevin Browne
+*  Author: Kevin Browne
 *
 *******************************************************************************/
 
